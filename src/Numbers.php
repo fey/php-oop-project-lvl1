@@ -13,7 +13,7 @@ class Numbers
     private ?bool $positive = null;
     private ?array $range = null;
 
-    public function required():self
+    public function required(): self
     {
         $this->required = true;
 

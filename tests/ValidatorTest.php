@@ -53,4 +53,21 @@ class ValidatorTest extends TestCase
         $this->assertEquals(false, $schema->isValid(-3)); // false
         $this->assertEquals(true, $schema->isValid(5)); // true
     }
+
+    public function testArray()
+    {
+        $schema = $this->validator->array();
+
+        $this->assertEquals(true, $schema->isValid(null)); // false @todo @fixme
+
+        $schema = $schema->required();
+
+        $this->assertEquals(true, $schema->isValid([])); // true
+        $this->assertEquals(true, $schema->isValid(['hexlet'])); // true
+
+        $schema->sizeof(2); // true
+
+        $this->assertEquals(false, $schema->isValid(['hexlet'])); // false
+        $this->assertEquals(true, $schema->isValid(['hexlet', 'code-basics'])); // true
+    }
 }
