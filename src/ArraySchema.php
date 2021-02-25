@@ -40,4 +40,9 @@ class ArraySchema
 
         return true;
     }
+
+    public function shape(array $array): ShapeSchema
+    {
+        return new ShapeSchema($array);
+    }
 }

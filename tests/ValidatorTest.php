@@ -70,4 +70,20 @@ class ValidatorTest extends TestCase
         $this->assertEquals(false, $schema->isValid(['hexlet'])); // false
         $this->assertEquals(true, $schema->isValid(['hexlet', 'code-basics'])); // true
     }
+
+    public function testShape()
+    {
+        $schema = $this->validator->array();
+
+        // Позволяет описывать валидацию для ключей массива
+        $schema->shape([
+            'name' => $this->validator->string()->required(),
+            'age' => $this->validator->number()->positive(),
+        ]);
+
+        $this->assertEquals(true, $schema->isValid(['name' => 'kolya', 'age' => 100])); // true
+        $this->assertEquals(true, $schema->isValid(['name' => 'maya', 'age' => null])); // true
+        $this->assertEquals(false, $schema->isValid(['name' => '', 'age' => null])); // false
+        $this->assertEquals(false, $schema->isValid(['name' => 'ada', 'age' => -5])); // false
+    }
 }
