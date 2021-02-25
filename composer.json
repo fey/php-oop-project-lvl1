@@ -1,12 +1,23 @@
 {
-    "name": "feycot/php-oop-project-lvl1",
+    "name": "hexlet/code",
     "authors": [
         {
             "name": "feycot",
             "email": "feycot@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Hexlet\\Validator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hexlet\\Validator\\Tests\\": "tests/"
+        }
+    },
     "require": {
+        "php": ">=7.4"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
