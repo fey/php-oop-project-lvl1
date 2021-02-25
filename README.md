@@ -1,6 +1,7 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/fey/php-oop-project-lvl1/workflows/hexlet-check/badge.svg)](https://github.com/fey/php-oop-project-lvl1/actions)
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/fc3be5da2d90a7701ac9/maintainability)](https://codeclimate.com/github/fey/php-oop-project-lvl1/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/fc3be5da2d90a7701ac9/test_coverage)](https://codeclimate.com/github/fey/php-oop-project-lvl1/test_coverage)
 
 ### Description
 Data validator is a library that can be used to check the correctness of any data.
