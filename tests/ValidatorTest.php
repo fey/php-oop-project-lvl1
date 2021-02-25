@@ -34,4 +34,23 @@ class ValidatorTest extends TestCase
         $this->assertTrue($schema->contains('what')->isValid('what does the fox say')); // true
         $this->assertFalse($schema->contains('whatthe')->isValid('what does the fox say')); // faFalse
     }
+
+    public function testNumbers()
+    {
+        $schema = $this->validator->number();
+
+        $this->assertEquals(true, $schema->isValid(null)); // true
+
+        $schema->required();
+
+        $this->assertEquals(false, $schema->isValid(null)); // false
+        $this->assertEquals(true, $schema->isValid(7)); // true
+
+        $schema->positive()->isValid(10); // true
+
+        $schema->range(-5, 5);
+
+        $this->assertEquals(false, $schema->isValid(-3)); // false
+        $this->assertEquals(true, $schema->isValid(5)); // true
+    }
 }

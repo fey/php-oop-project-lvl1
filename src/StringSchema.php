@@ -2,7 +2,6 @@
 
 namespace Hexlet\Validator;
 
-
 /**
  * required – любая непустая строка
  * minLength – строка равна или длиннее указанного числа

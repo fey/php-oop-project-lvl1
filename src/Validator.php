@@ -8,4 +8,9 @@ class Validator
     {
         return new StringSchema();
     }
+
+    public function number(): Numbers
+    {
+        return new Numbers();
+    }
 }
