@@ -7,7 +7,7 @@ namespace Hexlet\Validator;
  * positive – положительное число
  * range – диапазон в который должны попадать числа включая границы
  */
-class Numbers
+class NumberSchema implements Schema
 {
     private ?bool $required = null;
     private ?bool $positive = null;
@@ -40,6 +40,10 @@ class Numbers
             if (!is_numeric($value)) {
                 return false;
             }
+        }
+
+        if ($value === null) {
+            return true;
         }
 
         if ($this->positive !== null) {

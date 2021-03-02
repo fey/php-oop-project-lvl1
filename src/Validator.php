@@ -9,9 +9,9 @@ class Validator
         return new StringSchema();
     }
 
-    public function number(): Numbers
+    public function number(): NumberSchema
     {
-        return new Numbers();
+        return new NumberSchema();
     }
 
     public function array(): ArraySchema

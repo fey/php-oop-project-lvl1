@@ -7,7 +7,7 @@ namespace Hexlet\Validator;
  * minLength – строка равна или длиннее указанного числа
  * contains – строка содержит определённую подстроку
  */
-class StringSchema
+class StringSchema implements Schema
 {
     private ?bool $required = null;
     private ?string $substring = null;

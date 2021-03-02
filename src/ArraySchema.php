@@ -6,10 +6,11 @@ namespace Hexlet\Validator;
  * required – требуется тип данных array
  * sizeof – длина массива равна указанной
  */
-class ArraySchema
+class ArraySchema implements Schema
 {
     private ?bool $required = null;
     private ?int $size = null;
+    private ?array $shape = null;
 
     public function required(): self
     {
@@ -33,16 +34,26 @@ class ArraySchema
         }
 
         if ($this->size !== null) {
-            if (count($value) !== $this->size) {
+            if (\count($value) !== $this->size) {
                 return false;
+            }
+        }
+
+        if ($this->shape !== null) {
+            foreach ($this->shape as $key => $schema) {
+                if (!$schema->isValid($value[$key])) {
+                    return false;
+                }
             }
         }
 
         return true;
     }
 
-    public function shape(array $array): ShapeSchema
+    public function shape(array $array): self
     {
-        return new ShapeSchema($array);
+        $this->shape = $array;
+
+        return $this;
     }
 }
