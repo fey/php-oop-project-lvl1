@@ -28,8 +28,8 @@ class NumberSchema extends Schema
 
     /**
      * Диапазон в который должны попадать числа включая границы
-     * @param $min
-     * @param $max
+     * @param int $min
+     * @param int $max
      * @return $this
      */
     public function range(int $min, int $max): self
