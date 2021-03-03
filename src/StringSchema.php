@@ -9,59 +9,62 @@ namespace Hexlet\Validator;
  */
 class StringSchema implements Schema
 {
-    private ?bool $required = null;
-    private ?string $substring = null;
-    private ?int $minLength = null;
+    /** @var callable[]  */
+    private array $validators = [];
+    /** @var callable[]  */
+    private array $customValidators;
+
+    public function __construct(array $customValidators)
+    {
+        $this->customValidators = $customValidators;
+    }
 
     public function required(): self
     {
-        $this->required = true;
+        $this->validators['required'] = function ($value): bool {
+            return is_string($value) && $value !== '';
+        };
 
         return $this;
     }
 
     public function contains($substring): self
     {
-        $this->substring = $substring;
+        $this->validators['contains'] = function ($value) use ($substring): bool {
+            return mb_strpos($value, $substring) !== false;
+        };
 
         return $this;
     }
 
     public function minLength(int $minLength): self
     {
-        $this->minLength = $minLength;
+        $this->validators['minLength'] = function ($value) use ($minLength): bool {
+            return mb_strlen($value) >= $minLength;
+        };
 
         return $this;
     }
 
-    /**
-     * @param mixed $value
-     * @return bool
-     */
     public function isValid($value): bool
     {
-        if (!is_string($value)) {
-            return false;
-        }
-
-        if ($this->required !== null) {
-            if ($value === '') {
-                return false;
-            }
-        }
-
-        if ($this->minLength !== null) {
-            if (mb_strlen($value) < $this->minLength) {
-                return false;
-            }
-        }
-
-        if ($this->substring !== null) {
-            if (mb_strpos($value, $this->substring) === false) {
+        foreach ($this->validators as $validator) {
+            if (!$validator($value)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public function test(string $name, ...$args): self
+    {
+        $this->validators[$name] = function ($value) use ($name, $args) {
+            $validator = $this->customValidators[$name];
+
+            return $validator($value, ...$args);
+        };
+
+        return $this;
     }
 }

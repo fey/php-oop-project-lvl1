@@ -9,57 +9,55 @@ namespace Hexlet\Validator;
  */
 class NumberSchema implements Schema
 {
-    private ?bool $required = null;
-    private ?bool $positive = null;
-    private ?array $range = null;
+    /** @var callable[]  */
+    private array $validators = [];
+    private array $customValidators = [];
+
+    public function __construct(array $customValidators)
+    {
+        $this->customValidators = $customValidators;
+    }
 
     public function required(): self
     {
-        $this->required = true;
+        $this->validators['required'] = fn($value) => is_numeric($value);
 
         return $this;
     }
 
     public function positive(): self
     {
-        $this->positive = true;
+        $this->validators['positive'] = fn($value) => $value === null || $value > 0;
 
         return $this;
     }
 
     public function range($min, $max): self
     {
-        $this->range = [$min, $max];
+        $this->validators['range'] = fn($value) => ($min <= $value) && ($value <= $max);
 
         return $this;
     }
 
     public function isValid($value): bool
     {
-        if ($this->required !== null) {
-            if (!is_numeric($value)) {
-                return false;
-            }
-        }
-
-        if ($value === null) {
-            return true;
-        }
-
-        if ($this->positive !== null) {
-            if (0 > $value) {
-                return false;
-            }
-        }
-
-        if ($this->range !== null) {
-            [$min, $max] = $this->range;
-
-            if ($value < $min || $value > $max) {
+        foreach ($this->validators as $validator) {
+            if (!$validator($value)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    public function test(string $name, ...$args): self
+    {
+        $this->validators[$name] = function ($value) use ($name, $args) {
+            $validator = $this->customValidators[$name];
+
+            return $validator($value, ...$args);
+        };
+
+        return $this;
     }
 }
