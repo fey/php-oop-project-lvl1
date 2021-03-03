@@ -2,21 +2,12 @@
 
 namespace Hexlet\Validator;
 
-/**
- * required – требуется тип данных array
- * sizeof – длина массива равна указанной
- */
-class ArraySchema implements Schema
+class ArraySchema extends Schema
 {
-    /** @var callable[]  */
-    private array $validators = [];
-    private array $customValidators = [];
-
-    public function __construct(array $customValidators)
-    {
-        $this->customValidators = $customValidators;
-    }
-
+    /**
+     * Требуется тип данных array
+     * @return $this
+     */
     public function required(): self
     {
         $this->validators['required'] = fn($value) => is_array($value);
@@ -24,6 +15,11 @@ class ArraySchema implements Schema
         return $this;
     }
 
+    /**
+     * Длина массива равна указанной
+     * @param int $size
+     * @return self
+     */
     public function sizeof(int $size): self
     {
         $this->validators['sizeof'] = fn($value) => count($value) === $size;
@@ -31,18 +27,8 @@ class ArraySchema implements Schema
         return $this;
     }
 
-    public function isValid($value): bool
-    {
-        foreach ($this->validators as $validator) {
-            if (!$validator($value)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     /**
+     * Позволяет описывать валидацию для ключей массива
      * @param Schema[] $schemas
      * @return $this
      */
@@ -56,17 +42,6 @@ class ArraySchema implements Schema
             }
 
             return true;
-        };
-
-        return $this;
-    }
-
-    public function test(string $name, ...$args): self
-    {
-        $this->validators[$name] = function ($value) use ($name, $args) {
-            $validator = $this->customValidators[$name];
-
-            return $validator($value, ...$args);
         };
 
         return $this;
